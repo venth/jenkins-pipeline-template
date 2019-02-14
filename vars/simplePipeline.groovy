@@ -10,7 +10,7 @@ def call(body) {
     podTemplate(label: label, containers: [
         containerTemplate(
                 name: 'java',
-                image: 'openjdk:11-jre',
+                image: 'openjdk:11-jdk',
                 ttyEnabled: true, command: 'cat')],
             volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
