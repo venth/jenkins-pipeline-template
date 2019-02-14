@@ -10,21 +10,21 @@ def call(body) {
         stages {
             stage('checkout git') {
                 steps {
-                    git branch: pipelineParams.branch, credentialsId: 'GitCredentials', url: pipelineParams.scmUrl
+                    git branch: pipelineParams.branch, credentialsId: pipelineParams.credentialsId, url: pipelineParams.scmUrl
                 }
             }
 
             stage('build') {
                 steps {
-                    sh 'mvn clean package -DskipTests=true'
+                    sh './gradlew clean build'
                 }
             }
 
             stage ('test') {
                 steps {
                     parallel (
-                        "unit tests": { sh 'mvn test' },
-                        "integration tests": { sh 'mvn integration-test' }
+                        "unit tests": { echo "sh './gradlew test'" },
+                        "integration tests": { echo "sh 'mvn integration-test'" }
                     )
                 }
             }
