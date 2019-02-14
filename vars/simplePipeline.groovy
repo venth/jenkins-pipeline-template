@@ -16,46 +16,34 @@ def call(body) {
 
             pipeline {
                     stage('checkout git') {
-                        steps {
                             git branch: pipelineParams.branch, credentialsId: pipelineParams.credentialsId, url: pipelineParams.scmUrl
-                        }
                     }
 
                     node(label) {
                         container('java') {
                             stage('build') {
-                                steps {
                                     sh './gradlew clean build'
-                                }
                             }
                         }
                     }
 
                     stage ('test') {
-                        steps {
                             parallel (
                                     "unit tests": { echo "sh './gradlew test'" },
                                     "integration tests": { echo "sh 'mvn integration-test'" }
                             )
-                        }
                     }
 
                     stage('deploy developmentServer'){
-                        steps {
                             deploy(pipelineParams.developmentServer, pipelineParams.serverPort)
-                        }
                     }
 
                     stage('deploy staging'){
-                        steps {
                             deploy(pipelineParams.stagingServer, pipelineParams.serverPort)
-                        }
                     }
 
                     stage('deploy production'){
-                        steps {
                             deploy(pipelineParams.productionServer, pipelineParams.serverPort)
-                        }
                     }
                 post {
                     failure {
