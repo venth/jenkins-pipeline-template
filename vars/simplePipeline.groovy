@@ -26,7 +26,9 @@ def call(body) {
                         node(label) {
                             container('java') {
                                     unstash 'sources'
-                                    sh './gradlew clean build'
+                                    withEnv {
+                                        sh './gradlew clean build'
+                                    }
                             }
                         }
                     }
