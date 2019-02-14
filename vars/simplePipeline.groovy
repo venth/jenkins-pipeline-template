@@ -27,7 +27,7 @@ def call(body) {
                             container('java') {
                                     unstash 'sources'
                                     sh 'ls -lHa'
-                                    withEnv([]) {
+                                    withEnv(['DOCKER_HOST=unix:///var/run/docker.sock']) {
                                         sh './gradlew clean build'
                                     }
                             }
