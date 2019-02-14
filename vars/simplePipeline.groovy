@@ -26,7 +26,8 @@ def call(body) {
                         node(label) {
                             container('java') {
                                     unstash 'sources'
-                                    withEnv(['DOCKER_HOST=\'unix:///var/run/docker.sock\'']) {
+                                    withEnv(['DOCKER_HOST=unix:///var/run/docker.sock']) {
+                                        sh 'echo $DOCKER_HOST'
                                         sh './gradlew clean build --stacktrace'
                                     }
                             }
