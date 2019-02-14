@@ -7,12 +7,12 @@ def call(body) {
 
 
     def label = "mypod-${UUID.randomUUID().toString()}"
-    podTemplate(label: label, podRetention: never(), containers: [
+    podTemplate(label: label, containers: [
         containerTemplate(
                 name: 'java',
                 image: 'openjdk:11-jre',
-                ttyEnabled: true, command: 'cat',
-                volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')])]) {
+                ttyEnabled: true, command: 'cat')],
+            volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]) {
 
             pipeline {
                     stage('checkout git') {
@@ -27,7 +27,6 @@ def call(body) {
                             container('java') {
                                     unstash 'sources'
                                     withEnv(['DOCKER_HOST=unix:///var/run/docker.sock']) {
-                                        sh 'ls -laH /var/run/docker.sock'
                                         sh './gradlew clean build --stacktrace'
                                     }
                             }
