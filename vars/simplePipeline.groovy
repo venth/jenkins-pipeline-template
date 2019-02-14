@@ -26,10 +26,8 @@ def call(body) {
                         node(label) {
                             container('java') {
                                     unstash 'sources'
-                                    withEnv(["JAVA_OPTS=${env.JAVA_OPTS}"]) {
-                                        sh 'echo $JAVA_OPTS'
-                                        sh './gradlew clean build'
-                                    }
+                                    sh 'ls -lHa'
+                                    sh "./gradlew clean build ${env.JAVA_OPTS}"
                             }
                         }
                     }
