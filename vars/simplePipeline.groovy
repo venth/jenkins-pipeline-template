@@ -16,14 +16,16 @@ def call(body) {
 
             pipeline {
                     stage('checkout git') {
+                        node(label) {
                             git branch: pipelineParams.branch, credentialsId: pipelineParams.credentialsId, url: pipelineParams.scmUrl
+                        }
                     }
 
-                    node(label) {
-                        container('java') {
-                            stage('build') {
-                                    sh './gradlew clean build'
-                            }
+                    stage('build') {
+                        node(label) {
+                            container('java') {
+                                        sh './gradlew clean build'
+                                }
                         }
                     }
 
@@ -35,15 +37,21 @@ def call(body) {
                     }
 
                     stage('deploy developmentServer'){
+                        node(label) {
                             deploy(pipelineParams.developmentServer, pipelineParams.serverPort)
+                        }
                     }
 
                     stage('deploy staging'){
+                        node(label) {
                             deploy(pipelineParams.stagingServer, pipelineParams.serverPort)
+                        }
                     }
 
                     stage('deploy production'){
+                        node(label) {
                             deploy(pipelineParams.productionServer, pipelineParams.serverPort)
+                        }
                     }
                 post {
                     failure {
