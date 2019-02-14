@@ -15,7 +15,6 @@ def call(body) {
                 volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')])]) {
 
             pipeline {
-                stages {
                     stage('checkout git') {
                         steps {
                             git branch: pipelineParams.branch, credentialsId: pipelineParams.credentialsId, url: pipelineParams.scmUrl
@@ -58,7 +57,6 @@ def call(body) {
                             deploy(pipelineParams.productionServer, pipelineParams.serverPort)
                         }
                     }
-                }
                 post {
                     failure {
                         mail to: pipelineParams.email, subject: 'Pipeline failed', body: "${env.BUILD_URL}"
