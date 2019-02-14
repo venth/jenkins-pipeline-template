@@ -27,7 +27,7 @@ def call(body) {
                             container('java') {
                                     unstash 'sources'
                                     sh 'ls -lHa'
-                                    withEnv() {
+                                    withEnv([]) {
                                         sh './gradlew clean build'
                                     }
                             }
