@@ -27,6 +27,7 @@ def call(body) {
                             container('java') {
                                     unstash 'sources'
                                     withEnv(["JAVA_OPTS=${env.JAVA_OPTS}"]) {
+                                        sh 'echo $JAVA_OPTS'
                                         sh './gradlew clean build'
                                     }
                             }
