@@ -18,7 +18,7 @@ def call(body) {
                     stage('checkout git') {
                         node(label) {
                             git branch: pipelineParams.branch, credentialsId: pipelineParams.credentialsId, url: pipelineParams.scmUrl
-                            stash name: 'sources'
+                            stash name: 'sources', useDefaultExcludes: false
                         }
                     }
 
@@ -27,7 +27,9 @@ def call(body) {
                             container('java') {
                                     unstash 'sources'
                                     sh 'ls -lHa'
-                                    sh "./gradlew clean build ${env.JAVA_OPTS}"
+                                    withEnv() {
+                                        sh './gradlew clean build'
+                                    }
                             }
                         }
                     }
