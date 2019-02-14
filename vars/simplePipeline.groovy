@@ -18,14 +18,16 @@ def call(body) {
                     stage('checkout git') {
                         node(label) {
                             git branch: pipelineParams.branch, credentialsId: pipelineParams.credentialsId, url: pipelineParams.scmUrl
+                            stash name: 'sources'
                         }
                     }
 
                     stage('build') {
                         node(label) {
                             container('java') {
-                                        sh './gradlew clean build'
-                                }
+                                    unstash 'sources'
+                                    sh './gradlew clean build'
+                            }
                         }
                     }
 
