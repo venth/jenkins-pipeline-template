@@ -7,7 +7,7 @@ def call(body) {
 
 
     def label = "mypod-${UUID.randomUUID().toString()}"
-    podTemplate(label: label, containers: [
+    podTemplate(label: label, podRetention: never(), containers: [
         containerTemplate(
                 name: 'java',
                 image: 'openjdk:11-jre',
